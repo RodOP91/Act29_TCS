@@ -37,7 +37,7 @@ public class Ex_Cliente{
     public static IServer server;
     public static CallBackCliente cliente;
     
-    private int idCliente;
+    public static int idCliente;
     
     public Ex_Cliente()throws RemoteException{
         rmi();
@@ -63,7 +63,7 @@ public class Ex_Cliente{
             cliente = new CallBackCliente();
             Registry registro = LocateRegistry.getRegistry(HOSTNAMESERVER, PORT);
             server = (IServer) registro.lookup(NAMESERVICE);
-            server.registrarCallbackCliente(cliente);
+            idCliente = server.registrarCallbackCliente(cliente);
         }catch(RemoteException ex){
             System.out.println("Error en método RMI: " +  ex.getMessage());
         }catch(NotBoundException ex){

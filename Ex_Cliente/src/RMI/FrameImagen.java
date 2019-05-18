@@ -52,7 +52,11 @@ public class FrameImagen extends JInternalFrame implements Runnable{
             setVisible(true);
             setClosable(true);
             
+            
+            
             Ex_Cliente.pane.add(this);
+            
+            Ex_Cliente.server.notificarPorcentaje(100, Ex_Cliente.idCliente);
             
             
         } catch (Exception ex) {

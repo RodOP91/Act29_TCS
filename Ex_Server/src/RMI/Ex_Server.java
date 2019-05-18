@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package RMI;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
@@ -17,6 +18,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 /**
@@ -24,8 +28,11 @@ import javax.swing.WindowConstants;
  * @author ferzo
  */
 public class Ex_Server extends UnicastRemoteObject implements IServer{
-    
+    public JFrame frame;
     public static JButton iniciar;
+    
+    private  JLabel label;
+    private JPanel pane;
     private final int PORT = 3232;
     private List<Imagen> imagenes = new ArrayList<>(10);
     private List<ICliente> clientes = new ArrayList<>();
@@ -77,17 +84,25 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
     }
     
     public void interfazGrafica(){
-        JFrame frame = new JFrame("Examen Práctico TCS");
+        frame = new JFrame("Examen Práctico TCS");
         frame.setSize(800,600);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         iniciar = new JButton("Iniciar");
-        frame.add(iniciar);
-        frame.setVisible(true);
+        pane = new JPanel();
         
+        label = new JLabel();
+        label.setText("Clientes: --");
+        frame.add(label, BorderLayout.NORTH);
+        iniciar = new JButton("INICIAR");
+        pane.setVisible(true);
+        frame.add(pane, BorderLayout.CENTER);
+        frame.add(iniciar, BorderLayout.SOUTH);
+        frame.setVisible(true);
         iniciar.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 System.out.println("Se presiono el botón");
+                label.setText("Clientes: " + clientes.size());
                 if(!clientes.isEmpty()){
                     //Procesamiento de imágenes cuando sólo hay un cliente
                     if(clientes.size()==1){
@@ -98,28 +113,6 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
                         }
                          
                     }
-                    //Procesamiento de imágenes cuando hay dos clientes
-//                    if(clientes.size() ==2){
-//                        try{
-//                            List<Imagen> imgs = new ArrayList<>();
-//                            List<Imagen> imgs2= new ArrayList<>();;
-//                            
-//                            for(int x =0; x<imagenes.size();x++){
-//                                if(x<5){
-//                                    imgs.add(imagenes.get(x));
-//                                }else{
-//                                    imgs2.add(imagenes.get(x));
-//                                }
-//                            }
-//                            clientes.get(0).iniciaProcesamiento(imgs);
-//                            clientes.get(1).iniciaProcesamiento(imgs2);
-//                            /*clientes.get(0).iniciaProcesamiento((imgs = imagenes.subList(0,4)));
-//                            clientes.get(1).iniciaProcesamiento((imgs = imagenes.subList(5,9)));*/
-//                        }catch(Exception ex){
-//                            System.out.println("Error al repartir: " + ex.getMessage());
-//                        }
-//                        
-//                    }
                     
                     if(clientes.size() > 1 && clientes.size() <=10){
                         int contImagen = 0;
@@ -144,44 +137,28 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
                             }
                         }
                     }
-                    
-                    //Procesamiento de imágenes cuando hay más de dos clientes
-                    /*if(clientes.size()>1 && clientes.size()<=10){
-                        int sobrante = 10%clientes.size();
-                        int cant = 10 /(clientes.size()-sobrante);
-                        int indice=0;
-                        List<Imagen> img =null;
-                        for(int x =0; x < clientes.size(); x++){
-                            img = new ArrayList<>();
-                            for(int y =indice; y<cant; y++){
-                                img.add(imagenes.get(y));                                
-                            }
-                            try{
-                                clientes.get(x).iniciaProcesamiento(img);
-                            }catch(RemoteException ex){
-                                System.out.println("Error de REMOTEEXCEPTION en: " + ex.getMessage());
-                            }                            
-                        }
-                        for(int x =0; x<sobrante;  x++){
-                            img = new ArrayList<>();
-                            img.add(imagenes.get(indice));
-                            try{
-                                clientes.get(x).iniciaProcesamiento(img);
-                            }catch(RemoteException ex){
-                                
-                            }
-                        }
-                    }*/
+                 
                 }
             }
         });
         
     }
-    
-    
+        
     @Override
     public void notificarPorcentaje(int porcentaje, int idCliente) {
-        
+        JProgressBar barra = new JProgressBar();
+        JLabel lcliente = new JLabel();
+        barra.setMinimum(0);
+        barra.setMaximum(100);
+        barra.setStringPainted(true);
+        pane.add(lcliente);
+        pane.add(barra);
+         
+        lcliente.setText("Cliente " + idCliente);
+        barra.setValue(porcentaje);
+        frame.update(frame.getGraphics());
+        frame.setVisible(true);
+
     }
 
     @Override
