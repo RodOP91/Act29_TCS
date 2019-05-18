@@ -20,9 +20,9 @@ public class CallBackCliente extends UnicastRemoteObject implements ICliente{
     }
     
     @Override
-    public void iniciaProcesamiento(List<Imagen> imagenes)throws RemoteException{
+    public void iniciaProcesamiento(List<ECImagen> imagenes)throws RemoteException{
         int x=1;
-        for(Imagen imagen : imagenes) {
+        for(ECImagen imagen : imagenes) {
             System.out.println("Procesando imagen: " +  x);
             new Thread(new FrameImagen(imagen, x++)).start();
         }

@@ -19,6 +19,12 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+import RMI.ECImagen;
 /**
  *
  * @author ferzo
@@ -27,11 +33,11 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
     
     public static JButton iniciar;
     private final int PORT = 3232;
-    private List<Imagen> imagenes = new ArrayList<>(10);
+    private List<ECImagen> imagenes = new ArrayList<>(10);
     private List<ICliente> clientes = new ArrayList<>();
     
     public Ex_Server() throws RemoteException{
-        imagenes.add(new Imagen("TLOZ", "https://i.pinimg.com/originals/76/a9/67/76a967156646cf649d37a9a5f9a36acf.jpg"));
+        /*imagenes.add(new Imagen("TLOZ", "https://i.pinimg.com/originals/76/a9/67/76a967156646cf649d37a9a5f9a36acf.jpg"));
         //imagenes.add(new Imagen("MarioBros", "https://www.el-carabobeno.com/wp-content/uploads/2018/07/mario-bros.jpg"));
         imagenes.add(new Imagen("TheWitcher", "http://assets.vg247.com/current//2015/05/the_witcher_3_wild_hunt_guide_walkthrough.jpg"));
         imagenes.add(new Imagen("TheWitcher", "http://assets.vg247.com/current//2015/05/the_witcher_3_wild_hunt_guide_walkthrough.jpg"));
@@ -43,6 +49,23 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
         imagenes.add(new Imagen("Overwatch", "https://blznav.akamaized.net/img/games/cards/card-overwatch-7eff92e1257149aa.jpg"));
         //imagenes.add(new Imagen("Warhammer40000", "https://cdn-images-1.medium.com/max/1600/1*Spc0rmQ9Xf5gYY_c8BUnGQ.jpeg"));
         imagenes.add(new Imagen("Stellaris", "https://hb.imgix.net/7797384a66a57b3baea9fb335092a4fbd49301bd.jpg?auto=compress,format&fit=crop&h=353&w=616&s=fb0ea697fa8e5c30180d5f76665de12c"));
+        */        
+       
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("Ex_InterfazPU");
+        EntityManager em = emf.createEntityManager();
+   
+        em.getTransaction().begin();
+        
+        for(int x=1; x<11; x++){
+            ECImagen imagen = em.find(ECImagen.class, x);
+            imagenes.add(imagen);
+        }
+        
+        em.getTransaction().commit();
+
+        em.close();
+        emf.close();
+        
         interfazGrafica();
     }
 
@@ -123,7 +146,7 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
                     
                     if(clientes.size() > 1 && clientes.size() <=10){
                         int contImagen = 0;
-                        List<Imagen> list = new ArrayList<>();
+                        List<ECImagen> list = new ArrayList<>();
                         int contClientes = 0;
                         while(contClientes < clientes.size()){
                             list.add(imagenes.get(contImagen));
