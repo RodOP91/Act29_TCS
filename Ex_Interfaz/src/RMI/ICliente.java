@@ -18,6 +18,6 @@ public interface ICliente extends Remote{
      * Metodo que inicia el procesamiento de imagenes, lo llama el server
      * @param imagenes 
      */
-    public void iniciaProcesamiento(List<Imagen> imagenes) throws RemoteException;
+    public void iniciaProcesamiento(List<ECImagen> imagenes) throws RemoteException;
     
 }

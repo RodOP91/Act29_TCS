@@ -20,10 +20,10 @@ import javax.swing.JLabel;
  * @author ferzo
  */
 public class FrameImagen extends JInternalFrame implements Runnable{
-    private Imagen imagen;
+    private ECImagen imagen;
     private int numeroventana;
 
-    public FrameImagen(Imagen imagen, int numeroventana) {
+    public FrameImagen(ECImagen imagen, int numeroventana) {
         this.imagen = imagen;
         this.numeroventana = numeroventana;
     }
