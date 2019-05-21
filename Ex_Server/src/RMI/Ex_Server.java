@@ -28,7 +28,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import RMI.ECImagen;
+
 /**
  *
  * @author ferzo
@@ -166,9 +166,28 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
         });
         
     }
+     
+    public void guardarDatos(int id,int idCliente){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("Ex_InterfazPU");
+        EntityManager em = emf.createEntityManager();
+   
+        em.getTransaction().begin();
         
+        ECImagen imagen = em.find(ECImagen.class, id);
+        
+        java.util.Date d = new java.util.Date();  
+        java.sql.Date date2 = new java.sql.Date(d.getTime());
+        imagen.setFechadescarga(date2);
+        imagen.setIdcliente(idCliente);
+        
+        em.getTransaction().commit();
+
+        em.close();
+        emf.close();
+    }
+    
     @Override
-    public void notificarPorcentaje(int porcentaje, int idCliente) {
+    public void notificarPorcentaje(int porcentaje, int idCliente, int idImagen) {
         JProgressBar barra = new JProgressBar();
         JLabel lcliente = new JLabel();
         barra.setMinimum(0);
@@ -181,7 +200,9 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
         barra.setValue(porcentaje);
         frame.update(frame.getGraphics());
         frame.setVisible(true);
-
+        
+        guardarDatos(idImagen,idCliente);
+        
     }
 
     @Override

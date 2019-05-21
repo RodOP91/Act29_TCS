@@ -21,7 +21,7 @@ public interface IServer extends Remote{
      * @param idCliente
      * @throws RemoteException 
      */
-    public void notificarPorcentaje(int porcentaje, int idCliente) throws RemoteException;
+    public void notificarPorcentaje(int porcentaje, int idCliente, int idImagen) throws RemoteException;
     
     
     /**
