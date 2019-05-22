@@ -4,10 +4,10 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>RMI.ECImagen</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/imagenesDB"/>
-      <property name="javax.persistence.jdbc.user" value="rodrigo"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/Image"/>
+      <property name="javax.persistence.jdbc.user" value="Luis"/>
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
-      <property name="javax.persistence.jdbc.password" value="rodrigo"/>
+      <property name="javax.persistence.jdbc.password" value="Luis"/>
     </properties>
   </persistence-unit>
 </persistence>

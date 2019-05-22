@@ -2,7 +2,7 @@
 SCRIPT SIMPLIFICADO PARA LA ACTIVIDAD 29 DE TCS
 **/
 
-CREATE TABLE IMAGEN(
+/*CREATE TABLE IMAGEN(
     IDIMAGEN INTEGER NOT NULL,
     NOMBRE VARCHAR(50) NOT NULL,
     URL VARCHAR(170) NOT NULL,
@@ -21,3 +21,6 @@ INSERT INTO IMAGEN VALUES(7, 'Overwatch', 'https://blznav.akamaized.net/img/game
 INSERT INTO IMAGEN VALUES(8, 'Stellaris', 'https://hb.imgix.net/7797384a66a57b3baea9fb335092a4fbd49301bd.jpg?auto=compress,format&fit=crop&h=353&w=616&s=fb0ea697fa8e5c30180d5f76665de12c', NULL, NULL);
 INSERT INTO IMAGEN VALUES(9, 'Starcraft2', 'https://www.jinx.com/productimage/3855/23/1/900.jpg', NULL, NULL);
 INSERT INTO IMAGEN VALUES(10, 'DeadByDaylight', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQHfkZ7sio-Kv9jqStuB2p0mV1mxm2bg6o1TI_ZHzki0rn8bnEDQ', NULL, NULL);
+*/
+
+SELECT * INTO IMAGEN;

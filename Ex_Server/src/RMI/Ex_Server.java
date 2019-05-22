@@ -18,6 +18,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +32,7 @@ import javax.swing.WindowConstants;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.swing.DefaultListModel;
 import javax.swing.JDesktopPane;
@@ -127,7 +129,7 @@ public class Ex_Server extends UnicastRemoteObject implements IServer {
         pane.setVisible(true);
 
         JButton registros = new JButton("Ver registros");
-        
+
         frame.add(pane, BorderLayout.CENTER);
         frame.add(iniciar, BorderLayout.SOUTH);
         frame.setVisible(true);
@@ -185,30 +187,54 @@ public class Ex_Server extends UnicastRemoteObject implements IServer {
     }
 
     public void mostrarRegistros() {
+        List<ECImagen> listaImagenes = new ArrayList<>();
         JFrame res = new JFrame("Resultados");
-        res.setSize(800,600);
+        res.setSize(800, 600);
         res.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        res.setVisible(true); 
+        res.setVisible(true);
+        res.setResizable(false);
 
-        
         DefaultListModel modelo = new DefaultListModel();
         JList lista = new JList(modelo);
-                
+
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("Ex_InterfazPU");
         EntityManager em = emf.createEntityManager();
-        
+
         em.getTransaction().begin();
 
         for (int i = 1; i < 11; i++) {
             ECImagen imagen = em.find(ECImagen.class, i);
+            listaImagenes.add(imagen);
             modelo.addElement(imagen.getRegistro());
-            res.add(lista, BorderLayout.CENTER);
+            res.add(lista, BorderLayout.NORTH);
         }
 
         em.getTransaction().commit();
 
         em.close();
         emf.close();
+        JButton eliminar = new JButton("Eliminar registros");
+        eliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                for (int i = 0; i < 10; i++) {
+                    EntityManagerFactory emf = Persistence.createEntityManagerFactory("Ex_InterfazPU");
+                    EntityManager em = emf.createEntityManager();
+                    EntityTransaction transaccion = em.getTransaction();
+                    transaccion.begin();
+
+                    ECImagen imagenActualizada = em.merge(listaImagenes.get(i));
+                    imagenActualizada.setIdcliente(null);
+                    imagenActualizada.setFechadescarga(null);
+                    transaccion.commit();
+                    em.close();
+                    emf.close();
+                }
+            }
+
+        });
+        res.add(eliminar, BorderLayout.SOUTH);
     }
 
     public void guardarDatos(int id, int idCliente) {
