@@ -105,6 +105,11 @@ public class ECImagen implements Serializable {
     public void setIdcliente(Integer idcliente) {
         this.idcliente = idcliente;
     }
+    
+    public String getRegistro(){
+        return ( "Imagen "+ this.idimagen + " descargada por el cliente: "
+                    + this.idcliente + " el " + this.fechadescarga);
+    }
 
     @Override
     public int hashCode() {
