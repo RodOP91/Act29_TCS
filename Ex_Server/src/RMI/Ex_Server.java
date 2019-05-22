@@ -46,6 +46,7 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
     private JButton botonEliminarRegisto;
     private final int PORT = 3232;
     private List<ECImagen> imagenes = new ArrayList<>(10);
+    private ArrayList<ECImagen> registros;
     private List<ICliente> clientes = new ArrayList<>();
     
     public Ex_Server() throws RemoteException{
@@ -62,7 +63,7 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
         //imagenes.add(new Imagen("Warhammer40000", "https://cdn-images-1.medium.com/max/1600/1*Spc0rmQ9Xf5gYY_c8BUnGQ.jpeg"));
         imagenes.add(new Imagen("Stellaris", "https://hb.imgix.net/7797384a66a57b3baea9fb335092a4fbd49301bd.jpg?auto=compress,format&fit=crop&h=353&w=616&s=fb0ea697fa8e5c30180d5f76665de12c"));
         */        
-       
+       this.registros = new ArrayList();
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("Ex_InterfazPU");
         EntityManager em = emf.createEntityManager();
    
@@ -120,7 +121,7 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
         cabeza = new JPanel();
         cabeza.setVisible(true);
        cabeza.setSize(800,150);
-        frame.add(cabeza);
+        frame.add(cabeza, BorderLayout.NORTH);
         
         label = new JLabel();
         label.setText("Clientes: --");
@@ -144,7 +145,25 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
         this.cabeza.add(this.botonEliminarRegisto, BorderLayout.EAST);
         
         
+        this.botonEliminarRegisto.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Indice " + comboBox.getSelectedIndex());
+                System.out.println("URL" );
+                eliminarRegistro(registros.get(comboBox.getSelectedIndex()));
+                llenarComboBox();
+                
+            }
+        });
         
+         this.botonBuscarRegistro.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                llenarComboBox();
+
+            }
+        });
         
         iniciar.addActionListener(new ActionListener(){
             @Override
@@ -189,6 +208,25 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
                 }
             }
         });
+        
+    }
+    
+    public void eliminarRegistro(ECImagen eci){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("Ex_InterfazPU");
+        EntityManager em = emf.createEntityManager();
+   
+        em.getTransaction().begin();
+        
+        
+        ECImagen imagen = em.find(ECImagen.class, eci.getIdimagen());
+        
+        imagen.setFechadescarga(null);
+        imagen.setIdcliente(null);
+        
+        em.getTransaction().commit();
+
+        em.close();
+        emf.close();
         
     }
      
@@ -249,5 +287,47 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
         System.out.println("Deregistro terminado con éxito");
         
     }
+    
+    private void limpiarComboBox() {
+        
+        while (this.comboBox.getItemCount() != 0) {
+            this.comboBox.removeItemAt(0);
+            
+        }
+    }
+    
+    private void llenarComboBox() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("Ex_InterfazPU");
+        EntityManager em = emf.createEntityManager();
+
+        registros = new ArrayList();
+        em.getTransaction().begin();
+        for (int x = 1; x < 11; x++) {
+            if (em.find(ECImagen.class, x).getIdcliente() != null) {
+                ECImagen imagen = em.find(ECImagen.class, x);
+                registros.add(imagen);
+            }
+
+        }
+
+        System.out.println("Registros: "
+                + registros.size());
+        System.out.println("ComboBox: "
+                + comboBox.getItemCount());
+        limpiarComboBox();
+
+        int i = 1;
+
+        for (ECImagen eci : registros) {
+
+            if (eci.getIdcliente() != null) {
+                comboBox.addItem(i + " | ID: " + eci.getIdcliente()
+                        + " Fecha: " + eci.getFechadescarga());
+                i++;
+            }
+
+        }
+    }
+    
     
 }
