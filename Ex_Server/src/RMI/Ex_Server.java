@@ -27,6 +27,7 @@ import javax.swing.WindowConstants;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.JComboBox;
 
 
 /**
@@ -39,6 +40,10 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
     
     private  JLabel label;
     private JPanel pane;
+    private JPanel cabeza;
+    private JComboBox comboBox;
+    private JButton botonBuscarRegistro;
+    private JButton botonEliminarRegisto;
     private final int PORT = 3232;
     private List<ECImagen> imagenes = new ArrayList<>(10);
     private List<ICliente> clientes = new ArrayList<>();
@@ -112,15 +117,35 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         iniciar = new JButton("Iniciar");
         pane = new JPanel();
+        cabeza = new JPanel();
+        cabeza.setVisible(true);
+       cabeza.setSize(800,150);
+        frame.add(cabeza);
         
         label = new JLabel();
         label.setText("Clientes: --");
-        frame.add(label, BorderLayout.NORTH);
+       //frame.add(label, BorderLayout.NORTH);
         iniciar = new JButton("INICIAR");
         pane.setVisible(true);
         frame.add(pane, BorderLayout.CENTER);
         frame.add(iniciar, BorderLayout.SOUTH);
         frame.setVisible(true);
+        
+        
+        this.comboBox = new JComboBox();
+        this.botonBuscarRegistro = new JButton();
+        this.botonBuscarRegistro.setText("Buscar registros");
+        this.botonEliminarRegisto = new JButton();
+        this.botonEliminarRegisto.setText("Eliminar registro");
+        
+        this.cabeza.add(label, BorderLayout.WEST);
+        this.cabeza.add(this.comboBox, BorderLayout.CENTER);
+        this.cabeza.add(this.botonBuscarRegistro, BorderLayout.EAST);
+        this.cabeza.add(this.botonEliminarRegisto, BorderLayout.EAST);
+        
+        
+        
+        
         iniciar.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
