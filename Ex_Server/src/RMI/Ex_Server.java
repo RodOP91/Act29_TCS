@@ -148,9 +148,9 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
         this.botonEliminarRegisto.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Indice " + comboBox.getSelectedIndex());
-                System.out.println("URL" );
-                eliminarRegistro(registros.get(comboBox.getSelectedIndex()));
+                if (comboBox.getSelectedIndex() != -1) {
+                    eliminarRegistro(registros.get(comboBox.getSelectedIndex()));
+                }
                 llenarComboBox();
                 
             }
@@ -206,6 +206,8 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
                     }
                  
                 }
+                
+                llenarComboBox();
             }
         });
         
@@ -310,10 +312,6 @@ public class Ex_Server extends UnicastRemoteObject implements IServer{
 
         }
 
-        System.out.println("Registros: "
-                + registros.size());
-        System.out.println("ComboBox: "
-                + comboBox.getItemCount());
         limpiarComboBox();
 
         int i = 1;
